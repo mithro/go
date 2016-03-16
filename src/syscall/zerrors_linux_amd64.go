@@ -798,6 +798,7 @@ const (
 	RLIMIT_DATA                      = 0x2
 	RLIMIT_FSIZE                     = 0x1
 	RLIMIT_NOFILE                    = 0x7
+	RLIMIT_NPROC			 = 0x6
 	RLIMIT_STACK                     = 0x3
 	RLIM_INFINITY                    = -0x1
 	RTAX_ADVMSS                      = 0x8

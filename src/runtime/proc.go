@@ -422,7 +422,9 @@ func schedinit() {
 		_g_.racectx = raceinit()
 	}
 
-	sched.maxmcount = 10000
+	// Set the max thread count to 90% of the OS level thread limit. This
+	// allows space for fork/exec and other process launching.
+	setMaxThreads(runtime.threadlimit() * 90 / 100);
 
 	// Cache the framepointer experiment. This affects stack unwinding.
 	framepointer_enabled = haveexperiment("framepointer")
@@ -4029,6 +4031,9 @@ func runqsteal(_p_, p2 *p, stealRunNextG bool) *g {
 
 //go:linkname setMaxThreads runtime/debug.setMaxThreads
 func setMaxThreads(in int) (out int) {
+	if in > runtime.threadlimit() {
+		throw("setMaxThreads: Maximum threads to large!")
+	}
 	lock(&sched.lock)
 	out = int(sched.maxmcount)
 	sched.maxmcount = int32(in)

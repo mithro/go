@@ -299,6 +299,15 @@ func memlimit() uintptr {
 	return 0
 }
 
+func threadlimit() uintptr {
+	var rlimit, zero syscall.Rlimit
+	err := syscall.Getrlimit(RLIMIT_NPROC, &rlimit)
+	if err != nil || zero == rlimit {
+		return 10000
+	}
+	return rlimit.cur
+}
+
 //#ifdef GOARCH_386
 //#define sa_handler k_sa_handler
 //#endif
